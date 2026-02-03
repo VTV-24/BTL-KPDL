@@ -1,0 +1,21 @@
+seed: 42
+
+paths:
+  raw_data: data/raw/train.csv
+  processed_dir: data/processed
+  output_dir: outputs
+
+association:
+  min_support: 0.02
+  min_confidence: 0.4
+  min_lift: 1.1
+
+clustering:
+  n_clusters: 4
+
+classification:
+  test_size: 0.2
+
+forecasting:
+  freq: M
+  horizon: 6

@@ -1,0 +1,23 @@
+# ===== Core =====
+pandas
+numpy
+pyyaml
+
+# ===== Visualization =====
+matplotlib
+seaborn
+
+# ===== ML / Mining =====
+scikit-learn
+mlxtend
+statsmodels
+
+# ===== Notebook =====
+jupyter
+ipykernel
+papermill
+
+# ===== Utils =====
+tqdm
+joblib
+
