@@ -24,7 +24,7 @@ Download Superstore dataset from Kaggle:
 
 Place file into:
 
-data/raw/superstore.csv
+data/raw/train.csv
 
 ---
 
