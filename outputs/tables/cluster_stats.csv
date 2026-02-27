@@ -1,0 +1,5 @@
+Cluster,Count,Recency_mean,Frequency_mean,Monetary_mean,Monetary_sum,Pct,Segment
+3,128,107.88,7.88,6407.23,820124.86,16.1,VIP
+0,220,61.36,8.6,2833.52,623373.73,27.7,Loyal
+1,299,75.39,4.78,1619.5,484231.56,37.7,Potential
+2,146,366.12,4.03,1373.23,200491.86,18.4,Lost
