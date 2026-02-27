@@ -25,20 +25,20 @@ def build_basket_long(df: pd.DataFrame) -> pd.DataFrame:
 # =====================================================
 # MATRIX FORMAT (Apriori)
 # =====================================================
-def build_basket_matrix(df: pd.DataFrame) -> pd.DataFrame:
+def build_basket_matrix(df: pd.DataFrame, item_col: str = "Product Name") -> pd.DataFrame:
     """
     Basket pivot matrix
 
     Rows   = Order ID
-    Cols   = Product Name
+    Cols   = item_col (Product Name, Sub-Category, etc.)
     Values = 0/1
 
-    Output shape: (#orders, #products)
+    Output shape: (#orders, #items)
     """
 
     basket = (
         df
-        .groupby(["Order ID", "Product Name"])["Sales"]
+        .groupby(["Order ID", item_col])["Sales"]
         .sum()
         .unstack(fill_value=0)
     )
@@ -49,6 +49,17 @@ def build_basket_matrix(df: pd.DataFrame) -> pd.DataFrame:
     basket.reset_index(inplace=True)
 
     return basket
+
+
+# =====================================================
+# SUB-CATEGORY BASKET (dùng cho Association Rules)
+# =====================================================
+def build_basket_subcategory(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Build basket matrix using Sub-Category instead of Product Name.
+    More suitable for association rules with sparse product data.
+    """
+    return build_basket_matrix(df, item_col="Sub-Category")
 
 
 # =====================================================
