@@ -2,7 +2,7 @@
 
 **Phân tích doanh số siêu thị** – Bài tập lớn môn Khai phá dữ liệu
 
-## Team members
+## Thành viên nhóm
 - Member 1: Data + Feature Engineering
 - Member 2: Mining + Clustering  
 - Member 3: Modeling + Forecasting
@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ---
 
-## Dataset
+## Dữ liệu
 
 **Nguồn:** Superstore Sales Dataset (Kaggle)
 
@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 ---
 
-## Project Structure
+## Cấu trúc dự án
 
 ```
 BTL-KPDL/
@@ -79,7 +79,7 @@ BTL-KPDL/
 
 ---
 
-## ✅ Completed Tasks
+## ✅ Các nhiệm vụ đã hoàn thành
 
 ### 1. Association Rules (Market Basket Analysis)
 
@@ -150,15 +150,25 @@ python scripts/run_clustering.py
 
 ---
 
-##  Pending Tasks
+## Các nhiệm vụ đang chờ
 
-- [ ] Classification (dự đoán segment của khách hàng mới)
-- [ ] Forecasting (dự báo doanh số theo thời gian)
+- [ ] **Classification pipeline** (predict segment or churn/high-value).
+  - Data input: `data/processed/cluster_input.parquet`
+  - Use `python scripts/run_modeling.py` or notebook `05_classification.ipynb`.
+  - Outputs: `outputs/models/best_model.pkl`, `outputs/tables/model_metrics.csv`,
+    `outputs/figures/confusion_matrix.png`, `outputs/figures/feature_importance.png`.
+
+- [ ] **Forecasting pipeline** (monthly revenue trend & 6–12 month forecast).
+  - Data input: `data/raw/timeseries_monthly.csv`.
+  - Use `python scripts/run_forecasting.py` or notebook `06_forecasting.ipynb`.
+  - Outputs: `outputs/tables/forecast_metrics.csv`,
+    `outputs/figures/forecast_plot.png`, `outputs/figures/actual_vs_pred.png`.
+
 - [ ] Evaluation Report (tổng hợp kết quả)
 
 ---
 
-## Configuration
+## Cấu hình
 
 File: `configs/params.yaml`
 
@@ -176,19 +186,26 @@ clustering:
 
 ---
 
-## Quick Start
+## Bắt đầu nhanh
 
 ```bash
 # 1. Activate environment
 conda activate BTL_KPDL_env
 
-# 2. Run Association Rules
+# 2. Preprocess data (cleaning & feature engineering)
+python scripts/run_pipeline.py
+
+# 3. Association Rules
 python scripts/run_association.py
 
-# 3. Run Clustering
+# 4. Clustering (produces `cluster_input.parquet` used for classification)
 python scripts/run_clustering.py
 
-# 4. Check outputs
+# 5. Optionally run classification / forecasting
+python scripts/run_modeling.py
+python scripts/run_forecasting.py
+
+# 6. Check outputs
 ls outputs/tables/
 ls outputs/figures/
 ls outputs/models/

@@ -6,9 +6,9 @@ paths:
   output_dir: outputs
 
 association:
-  min_support: 0.02
-  min_confidence: 0.4
-  min_lift: 1.1
+  min_support: 0.01
+  min_confidence: 0.1
+  min_lift: 1.0
 
 clustering:
   n_clusters: 4
@@ -16,6 +16,23 @@ clustering:
 classification:
   test_size: 0.2
 
+modeling:
+  # target column present in cluster_input.parquet (e.g. 'high_value', 'churn', 'cluster')
+  target: target
+  drop_cols: []  # any additional columns to drop before training
+  algorithms:
+    - logistic
+    - random_forest
+    - xgboost
+  test_size: 0.2
+  random_state: 42
+  selection_criterion: roc_auc
+
 forecasting:
   freq: M
   horizon: 6
+  date_col: date   # name of date column in CSV
+  value_col: revenue  # name of target value column
+  test_periods: 6
+  forecast_horizon: 12
+  arima_order: [1, 1, 1]
