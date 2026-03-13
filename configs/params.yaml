@@ -16,6 +16,24 @@ clustering:
 classification:
   test_size: 0.2
 
+modeling:
+  target: Cluster
+  drop_cols:
+    - Customer ID
+    - Segment  # any additional columns to drop before training
+  algorithms:
+    - logistic
+    - random_forest
+    - xgboost
+  test_size: 0.2
+  random_state: 42
+  selection_criterion: accuracy
+
 forecasting:
   freq: M
   horizon: 6
+  date_col: date   # name of date column in CSV
+  value_col: revenue  # name of target value column
+  test_periods: 6
+  forecast_horizon: 12
+  arima_order: [1, 1, 1]

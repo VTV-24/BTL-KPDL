@@ -49,34 +49,34 @@ def main():
     processed_dir = os.path.join(ROOT, cfg["paths"]["processed_dir"])
     cleaned_path = os.path.join(processed_dir, "cleaned.parquet")
     df = pd.read_parquet(cleaned_path)
-    print(f"[INFO] Loaded cleaned data: {df.shape}")
+    print(f"[INFO] Đã tải dữ liệu đã làm sạch: {df.shape}")
 
     # ── 3. Build basket matrix (Product Name for top products) ─────
     basket_product = build_basket_matrix(df, item_col="Product Name")
     summary_product = basket_summary(basket_product)
-    print(f"[INFO] Product-level: Orders={summary_product['n_orders']}, "
-          f"Products={summary_product['n_products']}, Sparsity={summary_product['sparsity']}")
+    print(f"[INFO] Cấp sản phẩm: Đơn={summary_product['n_orders']}, "
+          f"Sản phẩm={summary_product['n_products']}, Tỷ lệ rỗng={summary_product['sparsity']}")
 
     # ── 4. Top sản phẩm bán chạy ───────────────────────────────────
     df_top = top_products(basket_product, top_n=20)
-    print(f"[INFO] Top 20 products computed")
+    print(f"[INFO] Đã tính 20 sản phẩm hàng đầu")
 
     # ── 5. Build basket by Sub-Category (for association rules) ────
     basket = build_basket_subcategory(df)
     summary = basket_summary(basket)
-    print(f"[INFO] Sub-Category level: Orders={summary['n_orders']}, "
-          f"Sub-Categories={summary['n_products']}, Sparsity={summary['sparsity']}")
+    print(f"[INFO] Cấp phân loại phụ: Đơn={summary['n_orders']}, "
+          f"Phân loại phụ={summary['n_products']}, Tỷ lệ rỗng={summary['sparsity']}")
 
     # ── 6. Frequent itemsets (FP-Growth) ────────────────────────────
     freq = find_frequent_itemsets(basket, min_support=min_support, algorithm="fpgrowth")
-    print(f"[INFO] Frequent itemsets: {len(freq)}")
+    print(f"[INFO] Số bộ mục thường xuyên: {len(freq)}")
 
     # ── 7. Rules ────────────────────────────────────────────────────
     rules = generate_rules(freq, min_confidence=min_confidence, min_lift=1.0)
-    print(f"[INFO] All rules: {len(rules)}")
+    print(f"[INFO] Tổng số luật: {len(rules)}")
 
     top_rules = filter_top_rules(rules, min_lift=min_lift, top_n=30)
-    print(f"[INFO] Top rules (lift >= {min_lift}): {len(top_rules)}")
+    print(f"[INFO] Luật hàng đầu (lift >= {min_lift}): {len(top_rules)}")
 
     # ── 8. Tạo thư mục output ──────────────────────────────────────
     output_dir = os.path.join(ROOT, cfg["paths"].get("output_dir", "outputs"))

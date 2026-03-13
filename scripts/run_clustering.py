@@ -52,28 +52,28 @@ def main():
     processed_dir = os.path.join(ROOT, cfg["paths"]["processed_dir"])
     cleaned_path = os.path.join(processed_dir, "cleaned.parquet")
     df = pd.read_parquet(cleaned_path)
-    print(f"[INFO] Loaded cleaned data: {df.shape}")
+    print(f"[INFO] Đã tải dữ liệu đã làm sạch: {df.shape}")
 
     rfm = build_rfm(df)
-    print(f"[INFO] RFM shape: {rfm.shape}")
+    print(f"[INFO] Kích thước RFM: {rfm.shape}")
 
     # ── 3. Cap outliers ─────────────────────────────────────────────
     rfm_capped = cap_outliers_iqr(rfm, cols=["Recency", "Frequency", "Monetary"])
-    print("[INFO] Outliers capped (IQR method)")
+    print("[INFO] Đã giới hạn ngoại lệ (phương pháp IQR)")
 
     # ── 4. Scale RFM ────────────────────────────────────────────────
     rfm_scaled, scaler = scale_rfm(rfm_capped, cols=["Recency", "Frequency", "Monetary"])
     X = rfm_scaled[["Recency", "Frequency", "Monetary"]].values
-    print("[INFO] RFM scaled with StandardScaler")
+    print("[INFO] Đã chuẩn hóa RFM bằng StandardScaler")
 
     # ── 5. Elbow & Silhouette ───────────────────────────────────────
     scores = elbow_scores(X, k_range=range(2, 11), random_state=seed)
-    print(f"[INFO] Elbow scores computed for k=2..10")
+    print(f"[INFO] Đã tính điểm Elbow cho k=2..10")
 
     # ── 6. Train KMeans ─────────────────────────────────────────────
     km = train_kmeans(X, n_clusters=n_clusters, random_state=seed)
     labels = km.labels_
-    print(f"[INFO] KMeans trained with k={n_clusters}")
+    print(f"[INFO] Đã huấn luyện KMeans với k={n_clusters}")
 
     # ── 7. Assign clusters to RFM ───────────────────────────────────
     rfm_clustered = assign_clusters(rfm_capped, labels)
@@ -81,7 +81,7 @@ def main():
     # ── 8. Cluster stats ────────────────────────────────────────────
     stats = cluster_stats(rfm_clustered)
     stats = label_clusters(stats)
-    print(f"[INFO] Cluster stats computed")
+    print(f"[INFO] Đã tính thống kê các cụm")
     print(stats.to_string(index=False))
 
     # ── 9. Map segment names back ───────────────────────────────────
@@ -101,8 +101,14 @@ def main():
     print(f"[SAVED] {tables_dir}/cluster_stats.csv")
 
     # Save RFM with clusters for later use
-    rfm_final.to_csv(os.path.join(tables_dir, "rfm_clustered.csv"), index=False)
-    print(f"[SAVED] {tables_dir}/rfm_clustered.csv")
+    csv_path = os.path.join(tables_dir, "rfm_clustered.csv")
+    rfm_final.to_csv(csv_path, index=False)
+    print(f"[SAVED] {csv_path}")
+
+    # also write a parquet version that will be used by the classification pipeline
+    parquet_path = os.path.join(processed_dir, "cluster_input.parquet")
+    rfm_final.to_parquet(parquet_path)
+    print(f"[SAVED] {parquet_path} (for classification)")
 
     # ── 12. Save model ──────────────────────────────────────────────
     save_model(km, os.path.join(models_dir, "kmeans.pkl"))

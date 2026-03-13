@@ -25,14 +25,14 @@ def main():
     # =================================================
     # 1️⃣ LOAD
     # =================================================
-    print("Loading data...")
+    print("Đang tải dữ liệu...")
     df = load_csv(raw_path)
     basic_info(df)
 
     # =================================================
     # 2️⃣ CLEAN
     # =================================================
-    print("Cleaning...")
+    print("Đang làm sạch...")
     cleaner = DataCleaner(df)
     df_clean = (
         cleaner
@@ -44,7 +44,7 @@ def main():
     cleaned_path = os.path.join(processed_dir, "cleaned.parquet")
     df_clean.to_parquet(cleaned_path, index=False)
 
-    print(f"Saved cleaned data -> {cleaned_path}")
+    print(f"Đã lưu dữ liệu đã làm sạch -> {cleaned_path}")
 
     # =================================================
     # 3️⃣ FEATURE ENGINEERING (TUẦN 2)
@@ -52,13 +52,13 @@ def main():
     print("\n========== FEATURE ENGINEERING ==========")
 
     # ---------- RFM ----------
-    print("Building RFM...")
+    print("Xây dựng RFM...")
     rfm = build_rfm(df_clean)
     rfm_path = os.path.join(processed_dir, "rfm.parquet")
     rfm.to_parquet(rfm_path, index=False)
 
     # ---------- Basket ----------
-    print("Building Basket...")
+    print("Xây dựng giỏ hàng...")
     basket_long = build_basket_long(df_clean)
     basket_path = os.path.join(processed_dir, "basket.parquet")
     basket_long.to_parquet(basket_path, index=False)
@@ -69,12 +69,12 @@ def main():
     basket_matrix.to_parquet(cluster_input_path)
 
     # ---------- Time series ----------
-    print("Building Time Series...")
+    print("Xây dựng chuỗi thời gian...")
     ts = build_monthly_timeseries(df_clean)
     ts_path = os.path.join(processed_dir, "timeseries_monthly.csv")
     ts.to_csv(ts_path, index=False)
 
-    print("\n✅ All preprocessing + features completed!")
+    print("\n✅ Tiền xử lý và tạo đặc tính hoàn tất!")
     print("Saved:")
     print("-", cleaned_path)
     print("-", rfm_path)
